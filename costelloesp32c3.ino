@@ -140,7 +140,7 @@ void setup(void) {
   sht4.begin();
   sht4.setPrecision(SHT4X_HIGH_PRECISION);
   sht4.setHeater(SHT4X_NO_HEATER);
-  delay(100);
+  delay(10);
   sht4.getEvent(&humidity, &temp);
       tempSHT = temp.temperature;
       humSHT = humidity.relative_humidity;
@@ -161,6 +161,8 @@ void setup(void) {
   Blynk.config(auth, IPAddress(192, 168, 50, 197), 8080);
   Blynk.connect();
     while ((!Blynk.connected()) && (millis() < 15000)){delay(250);}
+    if (WiFi.status() == WL_CONNECTED) {Blynk.run();}
+    Blynk.virtualWrite(V4, abshum);
   if (WiFi.status() == WL_CONNECTED) {Blynk.run();}
 
 
