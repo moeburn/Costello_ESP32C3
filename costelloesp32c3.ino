@@ -213,7 +213,7 @@ if (buttonstart) {
   }
   else   {
     pinMode(LED_PIN, INPUT);
-    goToSleep(300);
+    goToSleep(120);
 
   }
 }
