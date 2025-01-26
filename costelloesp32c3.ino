@@ -8,8 +8,11 @@
 #include "Adafruit_SHT4x.h"
 #include "Adafruit_VL53L0X.h"
 Adafruit_VL53L0X lox = Adafruit_VL53L0X();
+#include <Adafruit_AHTX0.h>
 
-Adafruit_SHT4x sht4 = Adafruit_SHT4x();
+Adafruit_AHTX0 aht;
+
+//Adafruit_SHT4x sht4 = Adafruit_SHT4x();
 sensors_event_t humidity, temp;
 
 #define LED_PIN 10
@@ -86,7 +89,8 @@ BLYNK_WRITE(V10) {
   }
   if (String("temps") == param.asStr()) {
 
-    sht4.getEvent(&humidity, &temp);
+    //sht4.getEvent(&humidity, &temp);
+    aht.getEvent(&humidity, &temp);
     tempSHT = temp.temperature;
     humSHT = humidity.relative_humidity;
     abshum = (6.112 * pow(2.71828, ((17.67 * tempSHT) / (tempSHT + 243.5))) * humSHT * 2.1674) / (273.15 + tempSHT);
@@ -136,12 +140,13 @@ void blinkLED(){
 }
 
 void setup(void) {
-  
-  sht4.begin();
+  aht.begin();
+  /*sht4.begin();
   sht4.setPrecision(SHT4X_HIGH_PRECISION);
   sht4.setHeater(SHT4X_NO_HEATER);
   delay(10);
-  sht4.getEvent(&humidity, &temp);
+  sht4.getEvent(&humidity, &temp);*/
+  aht.getEvent(&humidity, &temp);
       tempSHT = temp.temperature;
       humSHT = humidity.relative_humidity;
       abshum = (6.112 * pow(2.71828, ((17.67 * tempSHT)/(tempSHT + 243.5))) * humSHT * 2.1674)/(273.15 + tempSHT);
@@ -227,7 +232,8 @@ void loop() {
       every(30000){
       VL53L0X_RangingMeasurementData_t measure;
       lox.rangingTest(&measure, false); // pass in 'true' to get debug data printout!
-      sht4.getEvent(&humidity, &temp);
+      //sht4.getEvent(&humidity, &temp);
+      aht.getEvent(&humidity, &temp);
       tempSHT = temp.temperature;
       humSHT = humidity.relative_humidity;
       abshum = (6.112 * pow(2.71828, ((17.67 * tempSHT)/(tempSHT + 243.5))) * humSHT * 2.1674)/(273.15 + tempSHT);
